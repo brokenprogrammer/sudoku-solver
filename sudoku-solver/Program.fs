@@ -83,6 +83,9 @@ let valid (g : Grid) : bool =
     List.forall noDuplicates (cols g) &&
     List.forall noDuplicates (boxs g)
 
+let solve g : Grid list = 
+    g |> choices |> expand |> List.filter valid
+
 [<EntryPoint>]
 let main argv =
     printfn "Hello World"
