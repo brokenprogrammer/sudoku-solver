@@ -13,13 +13,17 @@ let undefined<'T> : 'T = failwith "Not implemented yet"
 
 let rows = (fun x -> x)
 
-let cols l = 
-    let rec getCol l n =
-        let dropOneCol = List.map (List.tail)
-        match n with
-            | 0 -> []
-            | _ -> List.map (List.head) l :: getCol (dropOneCol l) (n-1)
-    getCol l 9
+// TODO: Försök förstår hur denna fungerar..
+//  Oskar Mendel 2018-03-07
+let cols l =
+    l |> List.mapi (fun a row -> row |> List.mapi (fun b cell -> l.[b].[a]))
+
+let boxs l =
+    let rec split list = 
+        match list with
+            | [] -> []
+            | x::y::z::xs -> [x;y;z;] :: split xs
+    l |> List.map split |> split |> List.map cols // Concat lists here?
 
 let someSudoku : Grid = 
     [['5'; '3'; '0';  '0'; '7'; '0';  '0'; '0'; '0'];
