@@ -12,10 +12,27 @@ type Grid = Matrix<Digit>
 let undefined<'T> : 'T = failwith "Not implemented yet"
 
 let rows = (fun x -> x)
-//let cols = List.foldBack 
+
+let cols l = 
+    let rec getCol l n =
+        let dropOneCol = List.map (List.tail)
+        match n with
+            | 0 -> []
+            | _ -> List.map (List.head) l :: getCol (dropOneCol l) (n-1)
+    getCol l 9
 
 let someSudoku : Grid = 
-    [['1'; '2';]; ['2'; '3'; '4';]]
+    [['5'; '3'; '0';  '0'; '7'; '0';  '0'; '0'; '0'];
+     ['6'; '0'; '0';  '1'; '9'; '5';  '0'; '0'; '0'];
+     ['0'; '9'; '8';  '0'; '0'; '0';  '0'; '6'; '0'];
+
+     ['8'; '0'; '0';  '0'; '6'; '0';  '0'; '0'; '3'];
+     ['4'; '0'; '0';  '8'; '0'; '3';  '0'; '0'; '1'];
+     ['7'; '0'; '0';  '0'; '2'; '0';  '0'; '0'; '6'];
+
+     ['0'; '6'; '0';  '0'; '0'; '0';  '2'; '8'; '0'];
+     ['0'; '0'; '0';  '4'; '1'; '9';  '0'; '0'; '5'];
+     ['0'; '0'; '0';  '0'; '8'; '0';  '0'; '7'; '0']]
 
 let digits : Digit list = ['1'..'9']
 
@@ -40,8 +57,8 @@ let rec noDuplicates l : bool =
         | x::xs -> (not (List.contains x xs)) && noDuplicates xs
 
 let valid (g : Grid) : bool =
-    List.forall noDuplicates (rows g)
-    //List.forall noDuplicates (cols g) &&
+    List.forall noDuplicates (rows g) &&
+    List.forall noDuplicates (cols g)
     //List.forall noDuplicates (boxs g)
 
 [<EntryPoint>]
