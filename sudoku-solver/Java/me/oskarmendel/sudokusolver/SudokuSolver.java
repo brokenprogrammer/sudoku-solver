@@ -16,11 +16,9 @@ public class SudokuSolver {
 	
 	//TODO: Pretty printing?
 	//TODO: Allow for user input.
-	//TODO: Implement isValid method and use it to verify solution.
 	
 	public static void main(String[] args) {
-		if (solve(0, 0, unsolvedSudoku)) 
-		{
+		if (solve(0, 0, unsolvedSudoku) && isValid(unsolvedSudoku)) {
 			for (int row = 0; row < unsolvedSudoku.length; row++) {
 				for (int col = 0; col < unsolvedSudoku[row].length; col++) {
 					System.out.print(unsolvedSudoku[row][col]);
@@ -105,12 +103,32 @@ public class SudokuSolver {
 		return true;
 	}
 	
-	public boolean isValid() 
+	public static boolean isValid(int[][] sudoku) 
 	{
+		if (noDuplicates(sudoku) && noDuplicates(getColumns(sudoku)) && noDuplicates(getBoxes(sudoku))) {
+			return true;
+		}
+		
 		return false;
 	}
 	
-	public static int[][] getCoumns(int[][] sudoku)
+	public static boolean noDuplicates(int[][] sudoku) {
+		
+		for (int row = 0; row < sudoku.length; row++) {
+			for (int col = 0; col < sudoku[row].length; col++) {
+				int testing = sudoku[row][col];
+				for (int val = col+1; val < sudoku[row].length; val++) {
+					if (testing == sudoku[row][val]) {
+						return false;
+					}
+				}
+			}
+		}
+		
+		return true;
+	}
+	
+	public static int[][] getColumns(int[][] sudoku)
 	{
 		int colums[][] = new int[9][9];
 		for (int row = 0; row < sudoku.length; row++) {
@@ -122,10 +140,28 @@ public class SudokuSolver {
 		return colums;
 	}
 	
-	public int[][] getBoxes() 
+	public static int[][] getBoxes(int[][] sudoku) 
 	{
+		int boxes[][] = new int[sudoku.length][sudoku[0].length];
 		
-		return null;
+		int rowStart = 0;
+		int colStart = 0;
+		int tRow = 0;
+		for (int yMul = 1; yMul <= 3; yMul++) {
+			colStart = 0;
+			for (int xMul = 1; xMul <= 3; xMul++) {
+				for (int row = rowStart; row < 3 * yMul; row++) {
+					for (int col = colStart; col < 3 * xMul; col++) {
+						boxes[tRow][col - colStart + ((row - rowStart) * 3)] = sudoku[row][col];
+					}
+				}
+				colStart += 3;
+				tRow++;
+			}
+			rowStart += 3;
+		}
+		
+		return boxes;
 	}
 
 }
