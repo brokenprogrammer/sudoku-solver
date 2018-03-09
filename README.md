@@ -1,2 +1,2 @@
 # sudoku-solver
-Sudoku solver written in F#.
+Sudoku solver written in Java & F#.
